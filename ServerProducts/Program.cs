@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -16,15 +15,19 @@ namespace ServerProducts
         {
             var builder = WebApplication.CreateBuilder(args);
 
-
             var configuration = builder.Configuration;
 
+          
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
+            
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
-
+      
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
             builder.Services.AddScoped<IAuthService, AuthService>();
 
@@ -53,21 +56,20 @@ namespace ServerProducts
             });
 
             builder.Services.AddAuthorization();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
+            
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            
             app.UseAuthentication();
             app.UseAuthorization();
 
-
+            
             app.MapAuthEndpoints();
             app.MapProductEndpoints();
-
 
             app.Run();
         }
