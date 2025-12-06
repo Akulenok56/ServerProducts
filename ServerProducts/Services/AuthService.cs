@@ -30,7 +30,10 @@ namespace Products24Backend.Services
                 Email = dto.Email,
                 PhoneNumber = dto.PhoneNumber,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                Role = "Client"
+                Role = "Client",
+                City = dto.City,
+                Street = dto.Street,
+                HouseNumber = dto.HouseNumber
             };
 
             await _userRepo.AddAsync(user);
