@@ -58,16 +58,16 @@ namespace ServerProducts
             builder.Services.AddAuthorization();
 
             var app = builder.Build();
+            app.UseStaticFiles();
 
-            
             app.UseSwagger();
             app.UseSwaggerUI();
 
             
             app.UseAuthentication();
             app.UseAuthorization();
-
             
+
             app.MapAuthEndpoints();
             app.MapProductEndpoints();
 

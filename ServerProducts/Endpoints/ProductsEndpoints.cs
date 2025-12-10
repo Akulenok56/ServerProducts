@@ -39,7 +39,54 @@ namespace Products24Backend.Endpoints
                 return Results.Created($"/products/{product.ProductID}", product);
             });
 
-         
+            group.MapPost("/with-image", async (
+                     HttpRequest request,
+                     AppDbContext db,
+                     IWebHostEnvironment env) =>
+                        {
+                            var form = await request.ReadFormAsync();
+
+                            var name = form["name"].ToString();
+                            var description = form["description"].ToString();
+                            var price = decimal.Parse(form["price"]);
+                            var stock = int.Parse(form["stockQuantity"]);
+
+                            var file = form.Files["image"];
+                            if (file == null || file.Length == 0)
+                                return Results.BadRequest("Картинка обязательна");
+
+                            var ext = Path.GetExtension(file.FileName).ToLower();
+                            var fileName = $"{Guid.NewGuid()}{ext}";
+                            var savePath = Path.Combine(env.WebRootPath, "images", fileName);
+
+                            using (var stream = new FileStream(savePath, FileMode.Create))
+                            {
+                                await file.CopyToAsync(stream);
+                            }
+
+                           
+                            var imageUrl = $"http://10.0.2.2:5162/images/{fileName}";
+
+                            var product = new Product
+                            {
+                                ProductID = Guid.NewGuid(),
+                                Name = name,
+                                Description = description,
+                                Price = price,
+                                StockQuantity = stock,
+                                ImageUrl = imageUrl
+                            };
+
+                            db.Products.Add(product);
+                            await db.SaveChangesAsync();
+
+                            return Results.Ok(product);
+            });
+
+
+
+
+
             group.MapPut("/{id}/add-stock", async (
                 Guid id,
                 AddStockDto dto,
