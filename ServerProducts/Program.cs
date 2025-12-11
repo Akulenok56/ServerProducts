@@ -5,6 +5,7 @@ using Products24Backend.Data;
 using Products24Backend.Endpoints;
 using Products24Backend.Repositories;
 using Products24Backend.Services;
+using ServerProducts.Endpoints;
 using System.Text;
 
 namespace ServerProducts
@@ -70,6 +71,7 @@ namespace ServerProducts
 
             app.MapAuthEndpoints();
             app.MapProductEndpoints();
+            app.MapCartEndpoints();
 
             app.Run();
         }

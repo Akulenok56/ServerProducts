@@ -39,10 +39,7 @@ namespace Products24Backend.Endpoints
                 return Results.Created($"/products/{product.ProductID}", product);
             });
 
-            group.MapPost("/with-image", async (
-                     HttpRequest request,
-                     AppDbContext db,
-                     IWebHostEnvironment env) =>
+            group.MapPost("/with-image", async ( HttpRequest request, AppDbContext db, IWebHostEnvironment env) =>
                         {
                             var form = await request.ReadFormAsync();
 
@@ -87,10 +84,7 @@ namespace Products24Backend.Endpoints
 
 
 
-            group.MapPut("/{id}/add-stock", async (
-                Guid id,
-                AddStockDto dto,
-                AppDbContext db) =>
+            group.MapPut("/{id}/add-stock", async (Guid id, AddStockDto dto, AppDbContext db) =>
             {
                 var product = await db.Products.FindAsync(id);
 
